@@ -9,22 +9,29 @@ router.get("/", (req, res) => {
 
 router.post("/", async (req, res) => {
     const { username, password, email, name } = req.body;
-
+    console.log("entra");
     try {
-        console.log(username, password, email, name);
-        const user = await User.findOne({ username });
-        console.log(user);
-        if (user)
+        const userUsername = await User.findOne({ username });
+        console.log(userUsername);
+
+        if (userUsername)
             return res.render("signup", { error: "el usuario ya existe" });
 
-        console.log(username, password, email, name);
-    } catch (error) {
-        console.log(error);
+        // const userEmail = await User.findOne({ email });
+        // console.log(userEmail);
 
-        return res.render("signup", { message: "Hubo un error" });
-    }
+        // if (userEmail)
+        //     return res.render("signup", {
+        //         error: "el email ya está registrado"
+        //     });
+        console.log(name);
 
-    try {
+        if (!name || !username || !email || !password)
+            return res.render("signup", {
+                error: "Rellena todos los campos!"
+            });
+
+        console.log("try");
         const hashPass = bcrypt.hashSync(password, 10);
 
         const user = new User({
@@ -38,8 +45,9 @@ router.post("/", async (req, res) => {
         console.log(user);
         return res.redirect("/auth/login");
     } catch (error) {
-        console.log("error");
-        return res.render("auth/signup", { error: "Hubo un error" });
+        console.log(error);
+
+        return res.render("signup", { message: "Hubo un error" });
     }
 });
 

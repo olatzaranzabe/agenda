@@ -53,10 +53,10 @@ passport.use(
         {
             passReqToCallback: true
         },
-        async (req, username, password, next) => {
+        async (req, email, password, next) => {
             console.log("local-str");
             try {
-                const user = await User.findOne({ username });
+                const user = await User.findOne({ email });
                 console.log(user);
                 if (!user) {
                     console.log(null);
