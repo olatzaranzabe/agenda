@@ -14,7 +14,7 @@ const SERVER_PORT = process.env.SERVER_PORT || 5000;
 const DB_PORT = process.env.DB_PORT || 27017;
 
 const LocalStrategy = require("passport-local").Strategy;
-const indexRouter = require("./routes/auth/index");
+//const indexRouter = require("./routes/auth/index");
 const authRouter = require("./routes/auth");
 
 const app = express();
@@ -53,14 +53,12 @@ passport.use(
         {
             passReqToCallback: true
         },
-        async (req, email, password, next) => {
+        async (req, username, password, next) => {
             console.log("local-str");
             try {
-                const user = await User.findOne({ email });
+                const user = await User.findOne({ username });
                 console.log(user);
                 if (!user) {
-                    console.log(null);
-
                     return next(null, false, {
                         message: "El usuario no existe"
                     });
@@ -70,7 +68,7 @@ passport.use(
                     return next(null, false, {
                         message: "la contraseña no es correcta"
                     });
-
+                console.log("user", user);
                 next(null, user);
             } catch (error) {
                 console.log(error);
@@ -80,20 +78,16 @@ passport.use(
     )
 );
 
-// view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
 app.use(logger("dev"));
-//app.use(express.json());
-//app.use(express.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, "public")));
 
-//app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/email", require("./routes/email"));
 

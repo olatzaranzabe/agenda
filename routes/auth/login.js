@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 router.post(
     "/",
     passport.authenticate("local", {
-        successRedirect: "/",
+        successRedirect: "/auth/home",
         failureRedirect: "/auth/login",
         failureFlash: true,
         passReqToCallback: true
