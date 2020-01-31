@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const noteSchema = new Schema({
+    task: {
+        type: String,
+        require: [true, { message: "escribe una tarea" }]
+    },
     username: {
         type: String,
         require: [true, { message: "nombre de usuario es requerido" }]
@@ -12,7 +16,7 @@ const noteSchema = new Schema({
     },
     finished: {
         type: Boolean,
-        require: [true, { message: "contraseña es requerido" }]
+        require: true
     },
     public: {
         type: Boolean

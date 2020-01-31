@@ -17,6 +17,9 @@ const userSchema = new Schema({
     name: {
         type: String,
         require: [true, { message: "nombre es requerido" }]
+    },
+    notes: {
+        type: String
     }
 });
 

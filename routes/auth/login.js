@@ -6,6 +6,10 @@ router.get("/", (req, res) => {
     res.render("auth/login", { error: req.flash("error")[0] });
 });
 
+// request.session.token = token;
+
+// response.status(200).json({ message: token });
+
 router.post(
     "/",
     passport.authenticate("local", {
