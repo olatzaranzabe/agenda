@@ -20,7 +20,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const bcrypt = require('bcrypt');
-const flash = require('connect-flash');
+
 const User = require('./models/User.js');
 const SERVER_PORT = process.env.SERVER_PORT || 5000;
 const DB_PORT = process.env.DB_PORT || 27017;

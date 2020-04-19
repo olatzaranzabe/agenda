@@ -1,10 +1,11 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const passport = require("passport");
+const passport = require('passport');
 
-router.get("/", (req, res) => {
-    req.logOut();
-    res.redirect("auth/login");
+router.get('/', (req, res) => {
+  console.log('logout');
+  req.logOut();
+  res.redirect('/login');
 });
 
 module.exports = router;

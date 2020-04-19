@@ -3,11 +3,15 @@ const router = express.Router();
 const Task = require('../../models/Task');
 const User = require('../../models/User');
 const mongoose = require('mongoose');
+const { isAutenticated } = require('../../middlewares/authentication');
 // const passport = require("passport");
 
-router.get('/', async (req, res) => {
+router.get('/:username', async (req, res) => {
+  const { username } = req.params;
+
   try {
-    const taskList = await Task.find({ username: 'x' });
+    const taskList = await Task.find({ username: username.slice(1) });
+
     res.send({ taskList });
   } catch (error) {
     console.log(error);
