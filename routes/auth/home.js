@@ -18,40 +18,61 @@ router.get('/:username', async (req, res) => {
   }
 });
 router.post('/', async (req, res) => {
-  const { username, date, finished, task } = req.body;
-  await console.log(req.body);
+  const { username, date, finished, task, id } = req.body;
+  const taskdata = { username, date, finished, task, id };
 
   try {
-    const taskInfo = new Task({ username, date, finished, task });
-    console.log(taskInfo);
+    if (id.length > 0 && task.length === 0) {
+      const taskFindDB = await Task.findByIdAndDelete(id);
+      await console.log('borrar', taskFindDB);
+      res.status(200).json({ taskFindDB });
+    } else if (id.length > 0) {
+      const taskFindDB = await Task.findByIdAndUpdate(id, {
+        task: task,
+        finished: finished
+      });
+      await console.log('sobre', taskFindDB);
+      res.status(200).json({ taskFindDB });
+    } else {
+      const taskInfo = new Task({ username, date, finished, task });
+      console.log('guardado', taskInfo);
+      const taskDB = await taskInfo.save();
 
-    const taskDB = await taskInfo.save();
-
-    res.status(200).json({ taskDB });
-  } catch (error) {
+      res.status(200).json({ taskDB });
+    }
+  } catch {
     console.log(error);
-    return res.render('home', {
+    return res.render('/', {
       message: 'no se ha podido guardar la tarea'
     });
   }
 
-  //   // // //   try {
-  //   // // //     Note.find()
-  //   // // //       .then(notes => {
-  //   // // //         return res.send(notes);
-  //   // // //          res.render('auth/login', { error: req.flash('error')[0] });
-  //   // // //       })
-  //   // // //       .catch(error => {
-  //   // // //         return res
-  //   // // //           .status(500)
-  //   // // //           .send({ message: 'no se pueden cargar las notas' });
-  //   // // //       });
-  //   // // //   } catch (error) {
-  //   // // //     console.log('error find notes');
-  //   // // //   }
-  //   // // //   try {
-  //   // // //   } catch (error) {
-  //   // // //     console.log(error);
-  //   // // //   }
+  // try {
+  //   const taskInfo = new Task({ username, date, finished, task });
+  //   console.log('guardado', taskInfo);
+  //   const taskDB = await taskInfo.save();
+
+  //   res.status(200).json({ taskDB });
+  // } catch (error) {
+  //   console.log(error);
+  //   return res.render('home', {
+  //     message: 'no se ha podido guardar la tarea'
+  //   });
+  // }
+  // if (id.length < 2 || id === undefined) {
+  //   try {
+  //     console.log('vemos', id.length);
+  //     const taskFindDB = await Task.findByIdAndUpdate(id, taskdata);
+
+  //     await console.log('updated', taskFindDB);
+
+  //     res.status(200).json({ taskFindDB });
+  //   } catch (error) {
+  //     console.log(error);
+  //
+  //   }
+  // } else {
+  //
+  // }
 });
 module.exports = router;
