@@ -10,7 +10,7 @@ router.post('/', (req, res) => {
     console.log(
       `Auth estrategia local. Información recibida: error: ${error}, user: ${user}, info: ${info}`
     );
-
+    console.log('error', error);
     if (error) {
       return res.status(500).json({ message: 'Hubo un error' });
     }

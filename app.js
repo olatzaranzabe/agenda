@@ -22,7 +22,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const bcrypt = require('bcrypt');
 
 const User = require('./models/User.js');
-const SERVER_PORT = process.env.SERVER_PORT || 5000;
+const SERVER_PORT = process.env.SERVER_PORT || 8080;
 const DB_PORT = process.env.DB_PORT || 27017;
 const dbROute = process.env.DB_ROUTE;
 
@@ -57,9 +57,10 @@ passport.use(
         `Estrategia local. Información recibida: email ${email}, password${password}`
       );
       try {
-        // Buscamos el usuario a travñes del email
+        console.log('hey');
         const user = await User.findOne({ email });
 
+        await console.log(user);
         /*Si no hay usuario enviamos ejecutamos next con el primer parametro (error) a null, el segundo parametro 
          (data, en este caso usuario) a false y el tercer parametro (info) con el mensaje de error*/
         if (!user) next(null, false, { message: 'El usuario no existe' });
@@ -92,7 +93,6 @@ passport.use(
   // en este caso, el objeto de configuración lo hemos declarado en la constante opts anterior
   new JwtStrategy(opts, async (tokenPayload, next) => {
     console.log(`Estrategia jwt. Información recibida: token ${tokenPayload}`);
-
     // El callback de verificación, en este caso, recibe el token en formato json.
     try {
       // Buscamos el usuario por id accediendo al atributo sub del token que hemos definido en el login
