@@ -37,8 +37,9 @@ app.use(passport.initialize());
 app.use(
   session({
     secret: 'passport-authentication',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: true,
+    secure: true
   })
 );
 
