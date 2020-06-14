@@ -7,6 +7,7 @@ const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
 const mongoose = require('mongoose');
+const keys = require('./keys');
 
 var indexRouter = require('./routes/index');
 
@@ -22,7 +23,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const bcrypt = require('bcrypt');
 
 const User = require('./models/User.js');
-const SERVER_PORT = process.env.SERVER_PORT || 8080;
+const SERVER_PORT = process.env.SERVER_PORT || 5000;
 const DB_PORT = process.env.DB_PORT || 27017;
 const dbROute = process.env.DB_ROUTE;
 
@@ -58,7 +59,6 @@ passport.use(
         `Estrategia local. Información recibida: email ${email}, password${password}`
       );
       try {
-        console.log('hey');
         const user = await User.findOne({ email });
 
         await console.log(user);
@@ -86,33 +86,23 @@ const opts = {
   // Especificamos de donde queremos extraer el token. En este caso de los headers como Bearer token
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   // Señalamos el SECRET para comprobar que el token es correcto.
-  secretOrKey: process.env.JWT_SECRET
+  secretOrKey: keys.secretOrKey
 };
 
 passport.use(
-  // La estrategía jwt, al igual que la local, recibe un primer parametro de configuración y un callback de verificación como segundo parametro
-  // en este caso, el objeto de configuración lo hemos declarado en la constante opts anterior
   new JwtStrategy(opts, async (tokenPayload, next) => {
     console.log(`Estrategia jwt. Información recibida: token ${tokenPayload}`);
-    // El callback de verificación, en este caso, recibe el token en formato json.
     try {
-      // Buscamos el usuario por id accediendo al atributo sub del token que hemos definido en el login
       const user = await User.findOne({ _id: tokenPayload.sub });
 
-      // si el usuario no existe enviamos como tercer parametro (info) el mensaje de error,
-      // el usuario (segundo parametro) a false
-      // y el error (primer parametro) a null
       if (!user) next(null, false, { message: 'invalid token' });
 
-      // si el usuario existe, enviamos el primer parametro a null y el segundo con el usuario
       next(null, user);
     } catch (error) {
-      //En caso de error enviamos el error como primer parametro
       next(error);
     }
   })
 );
-// 5. Tras esto, podemos proceder a autenticar las rutas (ir a ./routes/index)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -131,7 +121,7 @@ app.use(function(req, res, next) {
 });
 
 mongoose
-  .connect(dbROute, {
+  .connect(process.env.DB_ROUTE, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
