@@ -5,7 +5,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const passport = require('passport');
-const session = require('express-session');
+// const session = require('express-session');
+const session = require('cookie-session');
+
 const mongoose = require('mongoose');
 const keys = require('./keys');
 
