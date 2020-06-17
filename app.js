@@ -114,8 +114,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/auth', require('./routes/auth'));
 
-app.set('views', __dirname + '/views'); // general config
-app.set('view engine', 'hbs');
+// app.set('views', __dirname + '/views'); // general config
+// app.set('view engine', 'hbs');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

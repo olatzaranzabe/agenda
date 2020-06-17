@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
     }
 
     if (!name || !username || !email || !password)
-      return res.render('signup', {
+      return res.render({
         error: 'Rellena todos los campos!'
       });
 
@@ -36,13 +36,14 @@ router.post('/', async (req, res) => {
     await user.save();
     console.log(user);
 
-    return res.redirect('login');
+    return res.json({ message: 'ok' });
+    // res.redirect('login');
     //res.json({ message: 'ok' });
     //res.redirect('/login', { message: 'login con tu nuevo user' });
   } catch (error) {
     console.log(error);
 
-    return res.render('signup', { message: 'Hubo un error' });
+    return res.render({ message: 'Hubo un error' });
   }
 });
 
