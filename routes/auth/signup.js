@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.log(error);
 
-    return res.render({ message: 'Hubo un error' });
+    return res.status(404).json('Hubo un error');
   }
 });
 
