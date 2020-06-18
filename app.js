@@ -133,7 +133,7 @@ app.use(function(req, res, next) {
 });
 
 mongoose
-  .connect(process.env.DB_ROUTE, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
