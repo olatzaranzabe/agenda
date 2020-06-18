@@ -3,6 +3,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+var timeout = require('connect-timeout');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
@@ -33,7 +34,9 @@ const dbROute = process.env.DB_ROUTE;
 const authRouter = require('./routes');
 
 const app = express();
+
 const cors = require('cors');
+app.use(timeout('5s'));
 app.use(cors());
 
 app.use(passport.initialize());
@@ -110,6 +113,7 @@ passport.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(haltOnTimedout);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
@@ -119,6 +123,11 @@ app.use('/auth', require('./routes/auth'));
 // app.set('view engine', 'hbs');
 
 // catch 404 and forward to error handler
+
+function haltOnTimedout(req, res, next) {
+  if (!req.timedout) next();
+}
+app.use(haltOnTimedout);
 app.use(function(req, res, next) {
   res.status(404).json({ message: 'Not found' });
 });
