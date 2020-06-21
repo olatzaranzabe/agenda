@@ -3,7 +3,6 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
-// 3. Definimos la ruta login para devolver el token al usuario
 router.post('/', (req, res) => {
   // procedemos a autenticar la estrategia local
   passport.authenticate('local', { session: false }, (error, user, info) => {
@@ -29,9 +28,6 @@ router.post('/', (req, res) => {
       username: user.username
     };
 
-    // Haciendo uso de la librería jsonwentoken generamos el token:
-    // como primer parametro recibe el payload en formato string (por lo que hay que "stringifycarlo")
-    // como segundo parámetro, recibe el SECRET también en formato de string. Lo recogemos del archivo .env
     const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET);
     const username = user.username;
     return res.status(200).json({ data: { token }, username: { username } });

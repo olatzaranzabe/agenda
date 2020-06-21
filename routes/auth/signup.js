@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
   const { username, password, email, name } = req.body;
-  console.log(req.body);
+
   try {
     const userUsername = await User.findOne({ username });
 
