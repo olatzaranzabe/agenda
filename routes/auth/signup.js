@@ -34,15 +34,9 @@ router.post('/', async (req, res) => {
     });
 
     await user.save();
-    console.log(user);
 
     return res.status(201).json(user);
-    // res.redirect('login');
-    //res.json({ message: 'ok' });
-    //res.redirect('/login', { message: 'login con tu nuevo user' });
   } catch (error) {
-    console.log(error);
-
     return res.status(404).json('Hubo un error');
   }
 });
